@@ -15,10 +15,13 @@ const MovieDetail = () => {
   const { id } = router.query;
   const [movie, setMovie] = useState<Movie | null>(null);
   const [cast, setCast] = useState<CastMember[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (id) {
-      // TMDB API'den film detaylarını çekmek
+      setLoading(true);
+      setError("");
       axios
         .get(
           `https://api.themoviedb.org/3/movie/${id}?api_key=cb316d4945cc6ec4cfbd735eb6ee2a06&language=en-US`
@@ -27,10 +30,13 @@ const MovieDetail = () => {
           setMovie(response.data);
         })
         .catch((error) => {
+          setError("Error fetching movie details.");
           console.error("Error fetching movie details:", error);
+        })
+        .finally(() => {
+          setLoading(false);
         });
 
-      // TMDB API'den film oyuncularını çekmek
       axios
         .get(
           `https://api.themoviedb.org/3/movie/${id}/credits?api_key=cb316d4945cc6ec4cfbd735eb6ee2a06&language=en-US`
@@ -39,12 +45,16 @@ const MovieDetail = () => {
           setCast(response.data.cast);
         })
         .catch((error) => {
+          setError("Error fetching cast.");
           console.error("Error fetching cast:", error);
         });
     }
   }, [id]);
 
-  if (!movie) return <div>Loading...</div>;
+  if (loading) return <div className="text-center">Loading...</div>;
+  if (error) return <div className="text-center text-red-500">{error}</div>;
+
+  if (!movie) return <div className="text-center">Movie not found.</div>;
 
   return (
     <div className="container mx-auto p-4">
