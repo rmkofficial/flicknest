@@ -11,6 +11,8 @@ const Category = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     if (name) {
@@ -18,10 +20,11 @@ const Category = () => {
       setError("");
       axios
         .get(
-          `https://api.themoviedb.org/3/discover/movie?api_key=cb316d4945cc6ec4cfbd735eb6ee2a06&with_genres=${name}&language=en-US&page=1`
+          `https://api.themoviedb.org/3/discover/movie?api_key=cb316d4945cc6ec4cfbd735eb6ee2a06&with_genres=${name}&language=en-US&page=${page}`
         )
         .then((response) => {
           setMovies(response.data.results);
+          setTotalPages(response.data.total_pages);
         })
         .catch((error) => {
           setError("Error fetching movies.");
@@ -31,7 +34,11 @@ const Category = () => {
           setLoading(false);
         });
     }
-  }, [name]);
+  }, [name, page]);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   if (loading) return <div className="text-center">Loading...</div>;
   if (error) return <div className="text-center text-red-500">{error}</div>;
@@ -54,6 +61,25 @@ const Category = () => {
             </div>
           </Link>
         ))}
+      </div>
+      <div className="flex justify-between mt-4">
+        <button
+          onClick={() => handlePageChange(page - 1)}
+          disabled={page === 1}
+          className="bg-gray-300 text-gray-700 p-2 rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span>
+          Page {page} of {totalPages}
+        </span>
+        <button
+          onClick={() => handlePageChange(page + 1)}
+          disabled={page === totalPages}
+          className="bg-gray-300 text-gray-700 p-2 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
       </div>
     </div>
   );
