@@ -151,8 +151,10 @@ const Home = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">Welcome to FlickNest</h1>
-      <form onSubmit={handleSearch} className="mb-4">
+      <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
+        Welcome to FlickNest
+      </h1>
+      <form onSubmit={handleSearch} className="mb-8 max-w-md mx-auto">
         <input
           type="text"
           placeholder="Search for a movie..."
@@ -167,7 +169,7 @@ const Home = () => {
           Search
         </button>
       </form>
-      <div className="mb-4">
+      <div className="mb-8 max-w-md mx-auto">
         <select
           value={selectedCategory}
           onChange={handleCategoryChange}
@@ -187,23 +189,27 @@ const Home = () => {
         <div className="text-center text-red-500">{error}</div>
       ) : (
         <div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {movies.map((movie) => (
-              <Link key={movie.id} href={`/movie/${movie.id}`}>
-                <div className="border p-4 rounded shadow cursor-pointer">
+              <Link key={movie.id} href={`/movie/${movie.id}`} legacyBehavior>
+                <a className="border p-4 rounded shadow cursor-pointer transition-transform transform hover:scale-105">
                   <Image
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                     alt={movie.title}
                     width={500}
                     height={750}
+                    className="rounded"
+                    priority={true} // priority property added
                   />
-                  <h2 className="text-xl mt-2">{movie.title}</h2>
-                  <p>{movie.release_date}</p>
-                </div>
+                  <h2 className="text-xl mt-4 text-center">{movie.title}</h2>
+                  <p className="text-center text-gray-600">
+                    {movie.release_date}
+                  </p>
+                </a>
               </Link>
             ))}
           </div>
-          <div className="flex justify-between mt-4">
+          <div className="flex justify-between mt-8">
             <button
               onClick={() => handlePageChange(page - 1)}
               disabled={page === 1}
