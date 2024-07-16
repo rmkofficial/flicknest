@@ -58,7 +58,7 @@ const MovieDetail = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
+      <h1 className="text-5xl font-bold mb-8 text-center text-gray-800">
         {movie.title}
       </h1>
       <div className="flex flex-col md:flex-row items-center md:items-start">

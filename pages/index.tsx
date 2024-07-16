@@ -3,6 +3,7 @@ import axios from "axios";
 import { Movie } from "../types/Movie";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Home = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -14,35 +15,33 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
-    setLoading(true);
-    setError("");
-    axios
-      .get(
-        "https://api.themoviedb.org/3/movie/popular?api_key=cb316d4945cc6ec4cfbd735eb6ee2a06&language=en-US&page=1"
-      )
-      .then((response) => {
-        setMovies(response.data.results);
-        setTotalPages(response.data.total_pages);
-      })
-      .catch((error) => {
-        setError("Error fetching movies.");
-        console.error("Error fetching movies:", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  const router = useRouter();
 
-    axios
-      .get(
-        "https://api.themoviedb.org/3/genre/movie/list?api_key=cb316d4945cc6ec4cfbd735eb6ee2a06&language=en-US"
-      )
-      .then((response) => {
-        setCategories(response.data.genres);
-      })
-      .catch((error) => {
-        console.error("Error fetching categories:", error);
-      });
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const [popularMoviesResponse, categoriesResponse] = await Promise.all([
+          axios.get(
+            "https://api.themoviedb.org/3/movie/popular?api_key=cb316d4945cc6ec4cfbd735eb6ee2a06&language=en-US&page=1"
+          ),
+          axios.get(
+            "https://api.themoviedb.org/3/genre/movie/list?api_key=cb316d4945cc6ec4cfbd735eb6ee2a06&language=en-US"
+          ),
+        ]);
+        setMovies(popularMoviesResponse.data.results);
+        setTotalPages(popularMoviesResponse.data.total_pages);
+        setCategories(categoriesResponse.data.genres);
+      } catch (error) {
+        setError("Error fetching initial data.");
+        console.error("Error fetching initial data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInitialData();
   }, []);
 
   const handleSearch = (event: FormEvent) => {
@@ -151,7 +150,7 @@ const Home = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
+      <h1 className="text-5xl font-bold mb-8 text-center text-gray-800">
         Welcome to FlickNest
       </h1>
       <form onSubmit={handleSearch} className="mb-8 max-w-md mx-auto">
@@ -190,18 +189,20 @@ const Home = () => {
       ) : (
         <div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {movies.map((movie) => (
+            {movies.map((movie, index) => (
               <Link key={movie.id} href={`/movie/${movie.id}`} legacyBehavior>
-                <a className="border p-4 rounded shadow cursor-pointer transition-transform transform hover:scale-105">
+                <a className="border p-4 rounded shadow cursor-pointer transition-transform transform hover:scale-105 bg-white">
                   <Image
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                     alt={movie.title}
                     width={500}
                     height={750}
                     className="rounded"
-                    priority={true} // priority property added
+                    priority={index < 8} 
                   />
-                  <h2 className="text-xl mt-4 text-center">{movie.title}</h2>
+                  <h2 className="text-xl mt-4 text-center font-semibold">
+                    {movie.title}
+                  </h2>
                   <p className="text-center text-gray-600">
                     {movie.release_date}
                   </p>
