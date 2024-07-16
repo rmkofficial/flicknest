@@ -169,7 +169,14 @@ const Home = () => {
         </button>
       </form>
       <div className="mb-8 max-w-md mx-auto">
+        <label
+          htmlFor="category"
+          className="block mb-2 text-sm font-medium text-gray-700"
+        >
+          Select a category
+        </label>
         <select
+          id="category"
           value={selectedCategory}
           onChange={handleCategoryChange}
           className="border p-2 rounded w-full"
@@ -198,7 +205,7 @@ const Home = () => {
                     width={500}
                     height={750}
                     className="rounded"
-                    priority={index < 8} 
+                    priority={index < 8}
                   />
                   <h2 className="text-xl mt-4 text-center font-semibold">
                     {movie.title}
