@@ -75,15 +75,15 @@ Bu projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izl
 Aşağıda uygulamanın bazı ekran görüntülerini bulabilirsiniz:
 
 ### Ana Sayfa
-![Ana Sayfa] ![ana sayfa](https://github.com/user-attachments/assets/39b5019e-f2dc-4786-b8db-5f5a199cb3e7)
+![Ana Sayfa](https://github.com/user-attachments/assets/39b5019e-f2dc-4786-b8db-5f5a199cb3e7)
 
 
 ### Film Detay Sayfası
-![Film Detay Sayfası] ![film detay sayfasi](https://github.com/user-attachments/assets/28548a61-bbd6-4405-aa77-79bcb95eab05)
+![Film Detay Sayfası](https://github.com/user-attachments/assets/28548a61-bbd6-4405-aa77-79bcb95eab05)
 
 
 ### Arama Sonuçları
-![Arama Sonuçları] ![arama sonuclari](https://github.com/user-attachments/assets/de5ef384-7871-49a1-a484-9be37af8a690)
+![Arama Sonuçları](https://github.com/user-attachments/assets/de5ef384-7871-49a1-a484-9be37af8a690)
 
 
 ## Katkıda Bulunma
